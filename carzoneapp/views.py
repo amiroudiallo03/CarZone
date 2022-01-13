@@ -68,10 +68,9 @@ def cars(request):
 
     return render(request, "cars.html")
 
-@login_required
-def dashboard(request):
-    
-    return render(request, 'dashboard.html')
+
+class DashboardView(TemplateView):
+    template_name = "dashboard.html"
 
 
 class AboutView(TemplateView):
