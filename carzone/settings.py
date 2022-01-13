@@ -132,8 +132,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media_cdn')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 AUTH_USER_MODEL = 'account.MyUser'
+
+LOGIN_URL = 'login_view'
+LOGIN_REDIRECT_URL = 'dashboard'
 
 MESSAGE_TAGS = {
     messages.ERROR: 'Error',

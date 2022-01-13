@@ -56,12 +56,18 @@
             </div>
             <div class="col-lg-4 col-md-4 col-sm-5">
                 <ul class="top-social-media pull-right">
+                    {% if  request.user.is_authenticated %}
+                    <li>
+                        <a href="{% url 'logout_view' %}" class="sign-in"><i class="fa fa-sign-out"></i> Logout</a>
+                    </li>
+                    {% else %}
                     <li>
                         <a href="{% url 'login_view' %}" class="sign-in"><i class="fa fa-sign-in"></i> Login</a>
                     </li>
                     <li>
                         <a href="{% url 'signup' %}" class="sign-in"><i class="fa fa-user"></i> Register</a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -73,38 +79,39 @@
 <header class="main-header sticky-header header-with-top">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand company-logo" href="index.html">
-                <img src="{% static 'img/logos/black-logo.png' %}" alt="logo">
+            <a class="navbar-brand company-logo" href="{% url 'index' %}">
+                <img src="{% static 'img/logos/logo.png' %}" alt="logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="fa fa-bars"></span>
             </button>
             <div class="navbar-collapse collapse w-100" id="navbar">
                 <ul class="navbar-nav ml-auto">
+                    
                     <li class="nav-item">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link" href="{% url 'index' %}">
                             Home
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="cars.html">
+                        <a class="nav-link" href="{% url 'cars' %}">
                             Cars
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/carhouse/about.html">
+                        <a class="nav-link" href="{% url 'about' %}">
                             About
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="services.html">
+                        <a class="nav-link" href="{% url 'service' %}">
                             Services
                         </a>
                     </li>
                     
                     
                     <li class="nav-item dropdown">
-                        <a class="nav-link" href="contact.html">Contact</a>
+                        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
                     </li>
                     <li class="nav-item dropdown m-hide">
                         <a href="#full-page-search" class="nav-link h-icon">
@@ -169,7 +176,9 @@
 <script  src="{% static 'js/jnoty.js' %}"></script>
 <script  src="{% static 'js/app.js' %}"></script>
 
-
+<script  src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+<!-- Custom javascript -->
+<script  src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
 </body>
 
 </html>
