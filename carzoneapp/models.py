@@ -61,6 +61,7 @@ class Model(Base):
 class Car(Base):
     name = models.CharField(max_length=50)
     slug = AutoSlugField(populate_from='name', null=True)
+    description = models.TextField(null=True)
     brand = models.ForeignKey(Brand, related_name='car_brand', on_delete=models.CASCADE)
     model = models.ForeignKey(Model, related_name="car_model", on_delete=models.CASCADE)
     location =  models.CharField(max_length=50)

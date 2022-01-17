@@ -140,6 +140,6 @@ LOGIN_URL = 'login_view'
 LOGIN_REDIRECT_URL = 'dashboard'
 
 MESSAGE_TAGS = {
-    messages.ERROR: 'Error',
+    messages.ERROR: 'danger',
 
 }

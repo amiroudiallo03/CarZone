@@ -5,13 +5,42 @@ from account.models import MyUser
 from carzoneapp import models
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView
 
 
 # Create your views here.
 
 class IndexView(TemplateView):
     template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["banners"] = models.Banner.objects.all()
+        context["cars"] = models.Car.objects.all()
+        return context
+    
+    # def get(self, request, *args, **kwargs):
+    #     banners = models.Banner.objects.all()
+    #     cars = models.Car.objects.filter(status=True).all()
+    #     context = {
+    #         'banners': banners,
+    #         'cars': cars,
+    #     }
+    #     return render(request, self.template_name, context) 
+
+
+class DetailView(DetailView):
+    model = models.Car
+    template_name = "detail/car-details.html"
+    context_object_name = "car"
+
+    # def get_object(self):
+    #     obj = super().get_object()
+    #     obj.save()
+
+    #     return obj 
+
+
 
 def signup(request):
     if request.method == 'POST':
@@ -55,7 +84,7 @@ def login_view(request):
             return redirect('dashboard')
         else:
             messages.error(request, 'email ou mot de passe incorrect')
-            return redirect('login')
+            return redirect('login_view')
 
     return render(request, 'login.html', locals())
 

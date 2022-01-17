@@ -5,7 +5,12 @@ from django.utils.safestring import mark_safe
 
 @admin.register(models.Car)
 class CarAdmin(admin.ModelAdmin):
-    list_display = ['name', 'brand','location']
+    list_display = ['name', 'brand','location','image_view']
+    list_display_links =['name', 'brand','image_view']  
+
+    def image_view(self, obj):
+        
+        return mark_safe(f'<img src="{obj.image.url}" style="width:100px; height:100px" >')
 
 @admin.register(models.Brand)
 class BrandAdmin(admin.ModelAdmin):
@@ -31,3 +36,6 @@ class SocialNetworkAdmin(admin.ModelAdmin):
 class TeamAdmin(admin.ModelAdmin):
     list_display = ['name', 'job', 'social_network']
     
+@admin.register(models.Model)
+class ModelAdmin(admin.ModelAdmin):
+    list_display = ['name',]
