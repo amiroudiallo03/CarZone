@@ -96,8 +96,9 @@ class SocialNetwork(Base):
     
 class Team(Base):
     name = models.CharField(max_length=50)
+    image = models.FileField(upload_to="team_image", max_length=100, null=True, blank=True)
     job = models.CharField(max_length=50)
-    social_network = models.ForeignKey(SocialNetwork, related_name="socialnetwork", on_delete=models.CASCADE)
+    social_network = models.ManyToManyField(SocialNetwork, related_name='team_network')
 
     class Meta:
         verbose_name = 'Team'

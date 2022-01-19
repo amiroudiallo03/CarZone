@@ -6,6 +6,7 @@ from carzoneapp import models
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, DetailView
+from django.db.models import Q
 
 
 # Create your views here.
@@ -18,6 +19,8 @@ class IndexView(TemplateView):
         context["banners"] = models.Banner.objects.all()
         context["cars"] = models.Car.objects.all()
         return context
+
+   
     
     # def get(self, request, *args, **kwargs):
     #     banners = models.Banner.objects.all()
@@ -63,7 +66,7 @@ def signup(request):
                     messages.error(request, 'Email is already exists!')
                     return redirect('signup')
                 else:
-                    forms = SignupForm({"firstname":firstname, "lastname":lastname, "username":username, "email":email, "password":password})
+                    forms = SignupForm(request.POST)
                     if forms.is_valid():
                         user = MyUser.objects.create_user(email=email, first_name=firstname, last_name=lastname, username=username, password=password)
                         login(request, user)
@@ -111,3 +114,25 @@ class ContactView(TemplateView):
 
 class ServiceView(TemplateView):
     template_name = "services.html"
+
+def search(request):
+    search  = False
+    if request.method == "POST":
+        keyword = request.POST["keyzord"]
+        brand = request.POST["select-brand"]
+        location = request.POST["select-location"]
+        year = request.POST["select-year"]
+        type = request.POST["select-type"]
+        price = request.POST["select-price"]
+        print(request.POST)
+        search = True
+        if search:
+            cars = models.Car.objects.filter(Q(name__icontains=keyword)|Q(brand__icontains=brand)|Q(location__icontains=location)|Q(year__icontains=year)|Q(type__icontains=model)|Q(price__icontains=price))
+
+    return render(request, 'search.html')
+
+
+        
+        
+
+

@@ -34,7 +34,11 @@ class SocialNetworkAdmin(admin.ModelAdmin):
 
 @admin.register(models.Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ['name', 'job', 'social_network']
+    list_display = ['name', 'job', 'image_view']
+
+    def image_view(self, obj):
+        
+        return mark_safe(f'<img src="{obj.image.url}" style="width:100px; height:100px" >')
     
 @admin.register(models.Model)
 class ModelAdmin(admin.ModelAdmin):
