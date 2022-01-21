@@ -13,11 +13,16 @@ from django.db.models import Q
 
 class IndexView(TemplateView):
     template_name = 'index.html'
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["banners"] = models.Banner.objects.all()
         context["cars"] = models.Car.objects.all()
+        #context["brand"] = models.Brand.objects.all()
+        context['city_search'] = models.Car.objects.values_list('location', flat=True).distinct()
+        context['brand_search'] = models.Car.objects.values_list('brand', flat=True).distinct()
+        context['year_search'] = models.Car.objects.values_list('year', flat=True).distinct()
+        context['model_search'] = models.Car.objects.values_list('model', flat=True).distinct()
         return context
 
    
@@ -117,19 +122,46 @@ class ServiceView(TemplateView):
 
 def search(request):
     search  = False
-    if request.method == "POST":
-        keyword = request.POST["keyzord"]
-        brand = request.POST["select-brand"]
-        location = request.POST["select-location"]
-        year = request.POST["select-year"]
-        type = request.POST["select-type"]
-        price = request.POST["select-price"]
-        print(request.POST)
-        search = True
-        if search:
-            cars = models.Car.objects.filter(Q(name__icontains=keyword)|Q(brand__icontains=brand)|Q(location__icontains=location)|Q(year__icontains=year)|Q(type__icontains=model)|Q(price__icontains=price))
+    cars = models.Car.objects.order_by('-date_add')
+    city_search = models.Car.objects.values_list('location', flat=True).distinct()
+    brand_search = models.Car.objects.values_list('brand', flat=True).distinct()
+    year_search = models.Car.objects.values_list('year', flat=True).distinct()
+    model_search = models.Car.objects.values_list('model', flat=True).distinct()
+    transmission_search = models.Car.objects.values_list('transmission', flat=True).distinct()
 
-    return render(request, 'search.html')
+    if 'keyword' in request.GET:
+        keyword = request.GET["keyword"]
+        if keyword:
+            cars = models.Car.objects.filter(name__icontains=keyword)
+    
+    if 'brand' in request.GET:
+        brand = request.GET["brand"]
+        if brand:
+            cars = models.Car.objects.filter(name__icontains=brand)
+
+    if 'location' in request.GET:
+        location = request.GET["location"]
+        if location:
+            cars = models.Car.objects.filter(location__icontains=location)
+    
+    if 'year' in request.GET:
+        year = request.GET["year"]
+        if year:
+            cars = models.Car.objects.filter(year__icontains=year)
+    
+    if 'type' in request.GET:
+        car_type = request.GET["type"]
+        if car_type:
+            cars = models.Car.objects.filter(description__icontains=car_type)
+    
+    if 'min_price' in request.GET:
+        min_price = request.GET['min_price']
+        max_price = request.GET['max_price']
+        if max_price:
+            cars = cars.filter(price__gte=min_price, price__lte=max_price)
+    print(request.GET)
+    
+    return render(request, 'search.html', locals())
 
 
         
