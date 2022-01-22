@@ -5,7 +5,7 @@ from account.models import MyUser
 from carzoneapp import models
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView
 from django.db.models import Q
 
 
@@ -101,9 +101,14 @@ def logout_view(request):
     logout(request)
 
     return redirect('login_view')
-def cars(request):
 
-    return render(request, "cars.html")
+class CarView(ListView):
+    template_name = "cars.html"
+    paginate_by = 2
+    model = models.Car
+    context_object_name = "cars"
+    
+    
 
 
 class DashboardView(TemplateView):
