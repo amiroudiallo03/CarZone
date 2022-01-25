@@ -104,10 +104,18 @@ def logout_view(request):
 
 class CarView(ListView):
     template_name = "cars.html"
-    paginate_by = 2
+    paginate_by = 4
     model = models.Car
     context_object_name = "cars"
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['city_search'] = models.Car.objects.values_list('location', flat=True).distinct()
+        context['cars_search'] = models.Car.objects.values_list('name', flat=True).distinct()
+        context['year_search'] = models.Car.objects.values_list('year', flat=True).distinct()
+        context['model_search'] = models.Car.objects.values_list('model', flat=True).distinct()
+        context['transmission_search'] = models.Car.objects.values_list('transmission', flat=True).distinct()
+        return context
     
 
 
@@ -164,8 +172,13 @@ def search(request):
         max_price = request.GET['max_price']
         if max_price:
             cars = cars.filter(price__gte=min_price, price__lte=max_price)
-    print(request.GET)
     
+    if 'category' in request.GET:
+        category = request.GET['category']
+        if category:
+            cars = cars.filter(description__icontains=category)
+    print(request.GET)
+    print(f"cars {cars}")
     return render(request, 'search.html', locals())
 
 
