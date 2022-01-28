@@ -88,10 +88,13 @@ def login_view(request):
         password = request.POST['password']
         if MyUser.objects.filter(email=email).exists():
             user = authenticate(request, email=email, password=password)
+            print("user id", user.id)
         else:
             user = MyUser.objects.get(username=email)
             user = authenticate(request, email=user, password=password)
+            print("user id", user.id)
         if user is not None:
+            print("USER ID", user.id)
             login(request, user)
             return redirect('dashboard')
         else:

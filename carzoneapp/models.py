@@ -2,6 +2,7 @@ from django.db import models
 from carzone import settings
 from django.db.models.signals import post_save
 from autoslug import AutoSlugField
+from django.urls import reverse
 # Create your models here.
 
 class Base(models.Model):
@@ -132,6 +133,10 @@ class Car(Base):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("detail_view", kwargs={"slug": self.slug})
+    
+
 # def post_save_receiver(sender, instance, created, **kwargs):
 #     if created:
 #         Profile.objects.create(user=instance, email=instance, first_name=instance, last_name=instance)
@@ -160,3 +165,44 @@ class Team(Base):
 
     def __str__(self):
         return self.name
+
+class About(Base):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    image = models.FileField(upload_to='about_image')
+    class Meta:
+        verbose_name = 'About'
+        verbose_name_plural = 'Abouts'
+
+    def __str__(self):
+        return self.title
+    
+class Service(Base):
+    icone = models.CharField(max_length=50)
+    title = models.CharField(max_length=50)
+    description = models.TextField()
+
+    class Meta:
+        verbose_name = 'Service'
+        verbose_name_plural = 'Services'
+
+    def __str__(self):
+        return self.title
+
+class Website(Base):
+    logo = models.FileField(upload_to="logo_website")
+    copyrights = models.CharField(max_length=50)
+    title_service = models.CharField(max_length=50)
+    description_service = models.TextField()
+    phone = models.CharField(max_length=50)
+    email = models.EmailField(max_length=254)
+    web = models.CharField(max_length=50)
+    fax = models.CharField(max_length=50)
+    
+    class Meta:
+        verbose_name = 'Website'
+        verbose_name_plural = 'Websites'
+
+    def __str__(self):
+        return self.title_service
+    

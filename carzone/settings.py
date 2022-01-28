@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'carzoneapp.apps.CarzoneappConfig',
     'account.apps.AccountConfig',
+    'contact.apps.ContactConfig',
 ]
 
 MIDDLEWARE = [
